@@ -1,0 +1,1 @@
+{"name":"imperio-investment-ai","private":true,"scripts":{"dev:web":"pnpm --filter @imperio/web dev","build:web":"pnpm --filter @imperio/web build"}}
