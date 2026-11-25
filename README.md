@@ -2,7 +2,7 @@
 
 **Desarrollado por EL IMPERIO — Los Reyes del Software**
 
-Fase 3: monorepo de lectura de mercados cripto y bursátiles, sin acceso a cuentas ni órdenes reales. Interfaz responsive Next.js y API FastAPI. El proyecto no incluye aún cartera virtual, IA, base de datos ni trading. No se inventan precios cuando falla el proveedor.
+Fase 4: monorepo de lectura de mercados cripto y bursátiles, sin acceso a cuentas ni órdenes reales. Interfaz responsive Next.js y API FastAPI. El proyecto no incluye aún cartera virtual, IA, base de datos ni trading. No se inventan precios cuando falla el proveedor.
 
 ## Requisitos
 Node.js 20.9+ (preferiblemente 24), pnpm y Python 3.11+. Ejecutar en Windows PowerShell, desde la carpeta raíz del proyecto.
@@ -62,3 +62,10 @@ $env:ALPHA_VANTAGE_API_KEY = "TU_CLAVE"
 No introducir claves en código, frontend, GitHub o mensajes. Sin clave, se muestra el catálogo sin precios. Verificar las condiciones de redistribución antes de publicar el servicio. No hay bróker, compra ni venta de acciones. Validación pendiente: pruebas automatizadas, compilación y consulta real con clave autorizada.
 
 **Autoría del software:** EL IMPERIO — Los Reyes del Software.
+
+## Fase 4 — Terminal financiera
+
+- Navegación lateral adaptable, resumen con datos recibidos, buscador de 13 activos y lista de seguimiento persistida localmente en el navegador.
+- Los resultados del buscador seleccionan el activo en su explorador; las acciones requieren consulta manual. La lista de seguimiento no contiene posiciones ni fondos.
+- Explorador de velas con cursor y deslizador accesible, OHLCV y fecha. No se inventan datos de mercado. Portafolio, IA y alertas siguen pendientes.
+- Sin nuevas dependencias de frontend. Validar con pnpm build:web y pruebas Python; la consulta de datos reales se valida aparte.

@@ -23,10 +23,9 @@ function DailyChart({candles}:{candles:Candle[]}){
     {candles.map((c,i)=><circle key={c.date} cx={12+i*570/Math.max(values.length-1,1)} cy={y(Number(c.close))} r="2" fill="#d4af37"><title>{c.date}: {usd(c.close)}</title></circle>)}
   </svg><figcaption><span>{candles[0].date}</span><span>{candles[candles.length-1].date}</span></figcaption></figure>;
 }
-export default function StockMarket(){
+export default function StockMarket({selected,onSelect}:{selected:string;onSelect:(symbol:string)=>void}){
   const [catalog,setCatalog]=useState<Catalog|null>(null);
   const [catalogError,setCatalogError]=useState('');
-  const [selected,setSelected]=useState('AAPL');
   const [query,setQuery]=useState<{symbol:string;id:number}|null>(null);
   const [data,setData]=useState<Daily|null>(null);
   const [error,setError]=useState('');
@@ -51,9 +50,9 @@ export default function StockMarket(){
     <div className="sectionhead"><div><h2>Mercado bursátil · Estados Unidos</h2><small>Alpha Vantage · datos diarios históricos, no tiempo real · USD</small></div><span className="tag">SOLO LECTURA</span></div>
     {catalogError&&<p role="alert" className="error">{catalogError}</p>}
     {catalog&&!catalog.configured&&<p>Activa el proveedor configurando ALPHA_VANTAGE_API_KEY en el backend. No se muestran precios ficticios.</p>}
-    <div className="stock-controls"><label>Empresa <select value={selected} disabled={!catalog} onChange={e=>{setSelected(e.target.value);setQuery(null);setLoading(false);setError('');}}>{(catalog?.stocks??[{symbol:'AAPL',name:'Apple',currency:'USD'}]).map(s=><option key={s.symbol} value={s.symbol}>{s.symbol} — {s.name}</option>)}</select></label><button disabled={!catalog?.configured||loading} onClick={()=>{setError('');setLoading(true);setQuery(q=>({symbol:selected,id:(q?.id??0)+1}));}}>{loading?'Consultando…':'Consultar histórico'}</button></div>
+    <div className="stock-controls"><label>Empresa <select value={selected} disabled={!catalog} onChange={e=>{onSelect(e.target.value);setQuery(null);setLoading(false);setError('');}}>{(catalog?.stocks??[{symbol:'AAPL',name:'Apple',currency:'USD'}]).map(s=><option key={s.symbol} value={s.symbol}>{s.symbol} — {s.name}</option>)}</select></label><button disabled={!catalog?.configured||(loading&&query?.symbol===selected)} onClick={()=>{setError('');setLoading(true);setQuery(q=>({symbol:selected,id:(q?.id??0)+1}));}}>{loading&&query?.symbol===selected?'Consultando…':'Consultar histórico'}</button></div>
     <small>Consulta manual para conservar la cuota del proveedor. El backend reutiliza datos durante cuatro horas.</small>
-    {error&&<p role="alert" className="error">{error}{current?' Se muestran los últimos datos recibidos.':''}</p>}
-    {current&&latest?<><div className="stats"><article><small>Último cierre disponible</small><strong>{usd(latest.close)}</strong></article><article><small>Variación entre sesiones</small><strong className={Number(current.change_percent)>=0?'positive':'negative'}>{Number(current.change_percent).toFixed(2)}%</strong></article><article><small>Sesión registrada</small><strong>{current.session_date}</strong></article></div><DailyChart candles={current.candles}/><p className="ohlc">Apertura {usd(latest.open)} · Máximo {usd(latest.high)} · Mínimo {usd(latest.low)} · Volumen {Number(latest.volume).toLocaleString('es-CO')} acciones.</p><small>Consulta original: {new Date(current.fetched_at).toLocaleString('es-CO')}{current.cached?' · Caché':''}. Serie sin ajustes por dividendos o splits.</small></>:<p>{loading?'Cargando histórico…':'Selecciona una empresa y consulta su histórico.'}</p>}
+    {error&&query?.symbol===selected&&<p role="alert" className="error">{error}{current?' Se muestran los últimos datos recibidos.':''}</p>}
+    {current&&latest?<><div className="stats"><article><small>Último cierre disponible</small><strong>{usd(latest.close)}</strong></article><article><small>Variación entre sesiones</small><strong className={Number(current.change_percent)>=0?'positive':'negative'}>{Number(current.change_percent).toFixed(2)}%</strong></article><article><small>Sesión registrada</small><strong>{current.session_date}</strong></article></div><DailyChart candles={current.candles}/><p className="ohlc">Apertura {usd(latest.open)} · Máximo {usd(latest.high)} · Mínimo {usd(latest.low)} · Volumen {Number(latest.volume).toLocaleString('es-CO')} acciones.</p><small>Consulta original: {new Date(current.fetched_at).toLocaleString('es-CO')}{current.cached?' · Caché':''}. Serie sin ajustes por dividendos o splits.</small></>:<p>{loading&&query?.symbol===selected?'Cargando histórico…':'Selecciona una empresa y consulta su histórico.'}</p>}
   </section>;
 }
