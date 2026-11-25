@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import StockMarket from './stock-market';
 
 type Market = { symbol: string; price: string; change_percent: string; high: string; low: string; quote_volume: string };
 type Snapshot = { source: string; fetched_at: string; markets: Market[] };
@@ -78,8 +79,8 @@ export default function Home() {
   const current = history?.symbol===symbol && history.interval===interval ? history : null;
   const latest = current?.candles[current.candles.length-1];
   return <main>
-    <header><div><span className="eyebrow">♛ EL IMPERIO</span><p>INVESTMENT INTELLIGENCE AI</p></div><span className="tag">MODO LECTURA</span></header>
-    <section className="hero"><span className="eyebrow">LABORATORIO FINANCIERO / 02</span><h1>Inteligencia para<br/> tus inversiones.</h1><p>Datos públicos de Binance Spot, sin conectar fondos ni ejecutar operaciones.</p></section>
+    <header><div><span className="eyebrow">♛ EL IMPERIO</span><p className="brand-author">LOS REYES DEL SOFTWARE</p><p>INVESTMENT INTELLIGENCE AI</p></div><span className="tag">MODO LECTURA</span></header>
+    <section className="hero"><span className="eyebrow">LABORATORIO FINANCIERO / 03</span><h1>Inteligencia para<br/> tus inversiones.</h1><p>Datos públicos de Binance Spot, sin conectar fondos ni ejecutar operaciones.</p></section>
     <section className="stats"><article><small>Conexión de cuenta</small><strong>No vinculada</strong></article><article><small>Operaciones reales</small><strong>Deshabilitadas</strong></article><article><small>Mercados disponibles</small><strong>{data?.markets.length ?? '—'}</strong></article></section>
     <section className="panel"><div className="sectionhead"><div><h2>Mercado cripto</h2><small>Binance Spot · estadísticas móviles de 24 horas</small></div><button onClick={()=>setRefresh(n=>n+1)}>Actualizar</button></div>
     <label className="auto"><input type="checkbox" checked={auto} onChange={e=>setAuto(e.target.checked)}/> Actualizar cada 60 segundos (se pausa si hay un error)</label>
@@ -89,7 +90,7 @@ export default function Home() {
     <div className="intervals">{intervals.map(i=><button key={i} aria-pressed={interval===i} onClick={()=>{setInterval(i);setHistoryError('');}}>{i}</button>)}</div>
     {historyError && <p role="alert" className="error">{historyError}{current?' Se muestra el último histórico recibido.':''}</p>}
     {current ? <><CandlestickChart candles={current.candles}/>{latest && <p className="ohlc">Última vela: O {money(latest.open)} · H {money(latest.high)} · L {money(latest.low)} · C {money(latest.close)} · Volumen base {money(latest.volume)}.</p>}<small>Consulta: {date(current.fetched_at)} · La última vela puede estar abierta.</small></> : <p>Sin histórico disponible para esta selección.</p>}</section>
-    <section className="panel"><h2>Acciones y portafolio</h2><p>Próximas fases: proveedor bursátil, cartera virtual y análisis asistido.</p></section>
-    <footer>Fase 2 · Sin órdenes reales · No constituye asesoría financiera</footer>
+    <StockMarket/><section className="panel"><h2>Portafolio</h2><p>Próximas fases: cartera virtual y análisis asistido.</p></section>
+    <footer>Fase 3 · Desarrollado por EL IMPERIO — Los Reyes del Software · Sin órdenes reales · No constituye asesoría financiera</footer>
   </main>;
 }

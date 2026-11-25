@@ -5,7 +5,10 @@ import httpx
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="Imperio Investment Intelligence API", version="0.1.0")
+from stocks import router as stocks_router
+
+app = FastAPI(title="EL IMPERIO — Los Reyes del Software | Investment Intelligence API", version="0.3.0")
+app.include_router(stocks_router)
 app.add_middleware(CORSMiddleware, allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"], allow_methods=["GET"], allow_headers=["*"])
 SYMBOLS = ("BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT")
 BINANCE_URL = "https://api.binance.com/api/v3/ticker/price"
